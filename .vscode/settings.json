@@ -1,0 +1,6 @@
+{
+    "files.associations": {
+        "my_info.h": "c",
+        "kernel.h": "c"
+    }
+}
