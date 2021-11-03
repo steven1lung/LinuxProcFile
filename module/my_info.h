@@ -7,7 +7,13 @@
 #include <linux/seq_file.h>
 #include <linux/uaccess.h>
 #include <linux/init.h>
+#include <linux/time.h>
+#include <linux/smp.h>
+#include <asm/processor.h>
 #include <linux/utsname.h>
+#include <linux/memory.h>
+#include <linux/ktime.h>
+#include <linux/mm.h>
 
 
 MODULE_LICENSE("GPL");
