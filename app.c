@@ -3,38 +3,99 @@
 int main()
 {
     char input;
+    FILE *fp;
 
-    printf("which information do you want?\nVersion(v),CPU(c),Memory(m),Time(t),All(a),Exit(e)?\n");
-
-    if(scanf("%c",&input)!=1) printf("failed to read input\n");
-
-
-    switch (input)
+    while(1)
     {
-    case 'a':
-    case 'v':
-        printf("Version:\n");
+        fp=fopen("/proc/my_info","r");
+        printf("which information do you want?\nVersion(v),CPU(c),Memory(m),Time(t),All(a),Exit(e)?");
 
-        break;
-    case 'c':
-        printf("CPU:\n");
+        scanf("%c%*c",&input);
+        printf("\n");
+        int i;
+        if(input=='e')
+        {
+            fclose(fp);
+            return 0;
+        }
+        char s;
+        switch (input)
+        {
+        case 'a':
+            while((s=fgetc(fp))!=EOF)
+            {
+                printf("%c",s);
+            }
+            break;
+        case 'v':
+            while((s=fgetc(fp))!='\n')
+            {
+                printf("%c",s);
+            }
+            printf("\n");
+            while((s=fgetc(fp))!='\n')
+            {
+                printf("%c",s);
+            }
+            printf("\n\n");
+            break;
+        case 'c':
+            for(i=0; i<3; i++)
+            {
+                while((s=fgetc(fp))!='\n');
+            }
+            for(i=0; i<10; i++)
+            {
+                while((s=fgetc(fp))!='\n')
+                {
+                    printf("%c",s);
+
+                }
+                printf("\n");
+            }
+            printf("\n");
+            break;
+        case 'm':
+            for(i=0; i<15; i++)
+            {
+                while((s=fgetc(fp))!='\n');
+            }
+            for(i=0; i<11; i++)
+            {
+                while((s=fgetc(fp))!='\n')
+                {
+                    printf("%c",s);
+
+                }
+                printf("\n");
+            }
+            printf("\n");
+            break;
+        case 't':
+            for(i=0; i<15; i++)
+            {
+                while((s=fgetc(fp))!='\n');
+            }
+            for(i=0; i<3; i++)
+            {
+                while((s=fgetc(fp))!='\n')
+                {
+                    printf("%c",s);
+
+                }
+                printf("\n");
+            }
+            printf("\n");
+
+            break;
+        default:
+            break;
+        }
 
 
-        break;
-    case 'm':
-        printf("Memory:\n");
-
-
-        break;
-    case 't':
-        printf("Time:\n");
-
-
-        break;
-    default:
-        break;
     }
 
 
+    fclose(fp);
     return 0;
 }
