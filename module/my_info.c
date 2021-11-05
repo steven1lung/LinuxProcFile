@@ -9,7 +9,7 @@ static int procfile_print(struct seq_file *m,void *v)
 {
     seq_printf(m,"==========Version==========\n");
     seq_printf(m,utsname()->sysname);
-    seq_printf(m," ");
+    seq_printf(m," version ");
     seq_printf(m,utsname()->release);
     seq_printf(m,"\n\n");
 
