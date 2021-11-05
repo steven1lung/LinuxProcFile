@@ -14,7 +14,9 @@
 #include <linux/memory.h>
 #include <linux/ktime.h>
 #include <linux/mm.h>
-
+#include <linux/mmzone.h>
+#include <linux/vmstat.h>
+#include <linux/meminfo.h>
 
 MODULE_LICENSE("GPL");
 MODULE_AUTHOR("PEKO");

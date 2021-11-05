@@ -8,14 +8,15 @@
 
 static struct proc_dir_entry *proc_file;
 
-static ssize_t procfile_read(struct file *filePointer, char __user *buffer, size_t buffer_length, loff_t *offset){
-    // char *s="==========Version==========\n"+utsname()->sysname; 
-    char *ver=utsname()->version; 
-    char *sys=utsname()->sysname; 
-    char *rel=utsname()->release; 
+static ssize_t procfile_read(struct file *filePointer, char __user *buffer, size_t buffer_length, loff_t *offset)
+{
+    // char *s="==========Version==========\n"+utsname()->sysname;
+    char *ver=utsname()->version;
+    char *sys=utsname()->sysname;
+    char *rel=utsname()->release;
 
     // strcat(sys,ver);
-    
+
 
 
 
@@ -23,18 +24,21 @@ static ssize_t procfile_read(struct file *filePointer, char __user *buffer, size
     int len =sizeof(s);
     ssize_t ret = len;
 
-    if(*offset>=len || copy_to_user(buffer,s,len)){
+    if(*offset>=len || copy_to_user(buffer,s,len))
+    {
         pr_info("copy_to_user failed\n");
         ret = 0;
     }
-    else{
+    else
+    {
         pr_info("procfile read %s\n", filePointer->f_path.dentry->d_name.name);
         *offset += len;
     }
-    return ret;   
+    return ret;
 }
 
-static int procfile_print(struct seq_file *m,void *v){
+static int procfile_print(struct seq_file *m,void *v)
+{
     seq_printf(m,"==========Version==========\n");
     seq_printf(m,utsname()->sysname);
     seq_printf(m," ");
@@ -43,12 +47,13 @@ static int procfile_print(struct seq_file *m,void *v){
     // seq_printf(m,utsname()->version);
     seq_printf(m,"\n\n");
     seq_printf(m,"============CPU============\n");
-    
+
 
     return 0;
 }
 
-static int proc_open(struct inode *inode,struct file *file){
+static int proc_open(struct inode *inode,struct file *file)
+{
     return single_open(file,procfile_print,NULL);
 }
 
@@ -57,7 +62,8 @@ static int proc_open(struct inode *inode,struct file *file){
 //     .proc_read = procfile_read,
 // };
 // #else
-static const struct file_operations proc_file_fops={
+static const struct file_operations proc_file_fops=
+{
     .owner = THIS_MODULE,
     .open = proc_open,
     .read = seq_read,
@@ -77,10 +83,12 @@ static const struct file_operations proc_file_fops={
 // }
 
 
-static int __init init_my_module(void){
+static int __init init_my_module(void)
+{
     proc_file=proc_create(procfs_name,0644,NULL,&proc_file_fops);
 
-    if(proc_file==NULL){
+    if(proc_file==NULL)
+    {
         proc_remove(proc_file);
         printk(KERN_ALERT "Error: Cound not initialize /proc/%s\n",procfs_name);
         return -ENOMEM;
@@ -97,7 +105,8 @@ static int __init init_my_module(void){
     return 0;
 }
 
-static void __exit exit_my_module(void){
+static void __exit exit_my_module(void)
+{
     proc_remove(proc_file);
     printk(KERN_INFO "/proc/%s removed\n",procfs_name);
 }

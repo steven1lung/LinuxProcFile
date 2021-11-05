@@ -1,8 +1,5 @@
 #include "my_info.h"
 
-// #if LINUX_VERSION_CODE >= KERNEL_VERSION(5,6,0)
-// #define HAVE_PROC_OPS
-// #endif
 
 #define procfs_name "my_info"
 
@@ -38,17 +35,27 @@ static int procfile_print(struct seq_file *m,void *v)
     seq_printf(m,"address sizes\t: %u bits physical, %u bits virtual\n",info->x86_phys_bits,info->x86_virt_bits);
     seq_printf(m,"\n\n");
 
+
+
     seq_printf(m,"==========Memory==========\n");
-    seq_printf(m,"Memtotal\t: %d\n",info->cpu_core_id);
-    seq_printf(m,"MemFree\t\t: %d\n",info->cpu_core_id);
-    seq_printf(m,"Buffers\t\t: %d\n",info->cpu_core_id);
-    seq_printf(m,"Active\t\t: %d\n",info->cpu_core_id);
-    seq_printf(m,"Inactive\t: %d\n",info->cpu_core_id);
-    seq_printf(m,"Shmen id\t: %d\n",info->cpu_core_id);
-    seq_printf(m,"Dirty\t\t: %d\n",info->cpu_core_id);
-    seq_printf(m,"Writeback\t: %d\n",info->cpu_core_id);
-    seq_printf(m,"KernelStack\t: %d\n",info->cpu_core_id);
-    seq_printf(m,"PageTables\t: %d\n",info->cpu_core_id);
+    struct sysinfo i;
+    si_meminfo(&i);
+    int lru;
+
+    unsigned long pages[NR_LRU_LISTS];
+    for(lru = LRU_BASE; lru<NR_LRU_LISTS; lru++)
+        pages[lru]=global_node_page_state(NR_LRU_BASE+lru);
+    // si_swapinfo(&i);
+    seq_printf(m,"Memtotal\t: %lu kB\n",i.totalram);
+    seq_printf(m,"MemFree\t\t: %lu kB\n",i.freeram);
+    seq_printf(m,"Buffers\t\t: %lu kB\n",i.bufferram);
+    seq_printf(m,"Active\t\t: %lu kB\n",pages[LRU_ACTIVE_ANON]+pages[LRU_ACTIVE_FILE]);
+    seq_printf(m,"Inactive\t: %lu kB\n",pages[LRU_INACTIVE_ANON]+pages[LRU_INACTIVE_FILE]);
+    seq_printf(m,"Shmen id\t: %lu kB\n",i.sharedram);
+    seq_printf(m,"Dirty\t\t: %lu kB\n",global_node_page_state(NR_FILE_DIRTY));
+    seq_printf(m,"Writeback\t: %lu kB\n",global_node_page_state(NR_WRITEBACK));
+    seq_printf(m,"KernelStack\t: %lu kB\n",global_zone_page_state(NR_KERNEL_STACK_KB));
+    seq_printf(m,"PageTables\t: %lu kB\n",global_zone_page_state(NR_PAGETABLE));
     seq_printf(m,"\n\n");
 
 
