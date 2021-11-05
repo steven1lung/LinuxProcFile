@@ -16,7 +16,7 @@
 #include <linux/mm.h>
 #include <linux/mmzone.h>
 #include <linux/vmstat.h>
-#include <linux/meminfo.h>
+// #include <linux/meminfo.h>
 
 MODULE_LICENSE("GPL");
 MODULE_AUTHOR("PEKO");
