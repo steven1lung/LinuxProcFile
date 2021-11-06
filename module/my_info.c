@@ -18,22 +18,31 @@ static int procfile_print(struct seq_file *m,void *v)
     unsigned cpu = get_cpu();
     struct cpuinfo_x86 *info;
     info=&cpu_data(cpu);
-    seq_printf(m,"processor\t: %u\n",cpu);
-    //model name
-    seq_printf(m,"model name\t: ");
-    if(info->x86_model_id[0]) seq_printf(m,"%s",info->x86_model_id);
-    else seq_printf(m,"%d86",info->x86);
+    unsigned iter=0;
 
-    seq_printf(m,"\nphysical id\t: %d\n",info->phys_proc_id);
-    seq_printf(m,"core id\t\t: %d\n",info->cpu_core_id);
+    for(iter=0; iter<info->booted_cores; iter++)
+    {
+        struct cpuinfo_x86 *info_iter;
+        info_iter=&cpu_data(iter);
+        seq_printf(m,"processor\t: %u\n",iter);
+        //model name
+        seq_printf(m,"model name\t: ");
+        if(info_iter->x86_model_id[0]) seq_printf(m,"%s",info_iter->x86_model_id);
+        else seq_printf(m,"%d86",info_iter->x86);
+
+        seq_printf(m,"\nphysical id\t: %d\n",info_iter->phys_proc_id);
+        seq_printf(m,"core id\t\t: %d\n",info_iter->cpu_core_id);
 
 
-    seq_printf(m,"cpu cores\t: %u\n",info->x86_max_cores);
-    seq_printf(m,"cache size\t: %d KB\n",info->x86_cache_size);
-    seq_printf(m,"clflush size\t: %u\n",info->x86_clflush_size);
-    seq_printf(m,"cache_alignment\t: %d\n",info->x86_cache_alignment);
-    seq_printf(m,"address sizes\t: %u bits physical, %u bits virtual\n",info->x86_phys_bits,info->x86_virt_bits);
-    seq_printf(m,"\n\n");
+        seq_printf(m,"cpu cores\t: %u\n",info_iter->booted_cores);
+        seq_printf(m,"cache size\t: %d KB\n",info_iter->x86_cache_size);
+        seq_printf(m,"clflush size\t: %u\n",info_iter->x86_clflush_size);
+        seq_printf(m,"cache_alignment\t: %d\n",info_iter->x86_cache_alignment);
+        seq_printf(m,"address sizes\t: %u bits physical, %u bits virtual\n\n",info_iter->x86_phys_bits,info_iter->x86_virt_bits);
+    }
+
+
+    seq_printf(m,"\n");
 
 
 
