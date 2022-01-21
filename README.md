@@ -1,1 +1,1 @@
-# OS2021_HW1
+A linux kernel module for processes to read hardware imformation
